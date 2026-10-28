@@ -148,10 +148,10 @@
     <source src="https://assets.mixkit.co/music/preview/mixkit-celebration-song-339.mp3" type="audio/mp3">
   </audio>
 
-  <!-- Step 0: 29 October Countdown -->
+  <!-- Step 0: 29 October Countdown (Bina kisi bypass button ke) -->
   <div id="step0" class="card">
     <h2>⏳ Counting Down...</h2>
-    <p>Khaas din shuru hone mein bas itna waqt bacha hai:</p>
+    <p>Khaas din shuru hone mein bas itna waqt baaki hai:</p>
     
     <div class="timer-grid">
       <div class="t-box"><span id="days">00</span><small>Din</small></div>
@@ -160,10 +160,10 @@
       <div class="t-box"><span id="secs">00</span><small>Second</small></div>
     </div>
 
-    <button class="btn" style="background:#888; font-size: 0.85rem; padding: 10px;" onclick="goToStep(0, 1)">Seedhe Surprise Dekhein (Preview) 👉</button>
+    <p style="font-size: 0.85rem; color: #888; margin-top: 15px;">Sabr ka phal meetha hota hai... thoda intezaar karein! 😉</p>
   </div>
 
-  <!-- Step 1: Gift Box -->
+  <!-- Step 1: Gift Box (Ye tabhi dikhega jab time complete hoga) -->
   <div id="step1" class="card hidden">
     <h2>🎁 Are ruko zara!</h2>
     <p>Tumhare liye ek khaas parcel aaya hai. Kholkar dekhna hai?</p>
@@ -180,7 +180,7 @@
     <div class="hint">(Gubbare par tap karo)</div>
   </div>
 
-  <!-- Step 3: Cut Cake -->
+  <!-- Step 3: Cake Cut -->
   <div id="step3" class="card hidden">
     <h2>🎂 Wish maango!</h2>
     <p>Man mein ek achhi si wish maango aur cake par tap karo!</p>
@@ -188,14 +188,13 @@
     <div class="hint">(Cake par tap karo)</div>
   </div>
 
-  <!-- Step 4: Final Birthday Wish + Photo + DOB -->
+  <!-- Step 4: Final Page (DOB + Photo + Wish) -->
   <div id="step4" class="card hidden">
     <h2 style="color: #ff477e; font-size: 1.6rem;">🎉 HAPPY BIRTHDAY! 🎂</h2>
     
     <div class="dob-badge">✨ Born: 29 October ✨</div>
     <br>
     
-    <!-- Aapka diya hua photo link yahan laga diya hai -->
     <img src="https://i.postimg.cc/Dzbm7LKQ/Screenshot-2026-10-28-09-51-30-27-1c337646f29875672b5a61192b9010f9.jpg" alt="Birthday" class="birthday-img">
     
     <p style="margin-top: 14px; font-weight: 500;">
@@ -206,6 +205,7 @@
   </div>
 
   <script>
+    // 29 October 00:00:00 ka exact target
     const targetDate = new Date("October 29, 2026 00:00:00").getTime();
 
     const timerInterval = setInterval(() => {
@@ -263,4 +263,3 @@
   </script>
 </body>
 </html>
-
