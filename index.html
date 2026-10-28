@@ -1,1 +1,266 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>A Special Surprise for You</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      width: 100%;
+      max-width: 360px;
+      padding: 30px 20px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.4s ease;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .timer-grid {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .t-box {
+      background: #ff477e;
+      color: white;
+      padding: 10px 8px;
+      border-radius: 12px;
+      min-width: 60px;
+    }
+
+    .t-box span {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .t-box small {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .tap-target {
+      font-size: 75px;
+      margin: 15px 0;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.15s ease;
+      user-select: none;
+    }
+
+    .tap-target:active {
+      transform: scale(0.85);
+    }
+
+    .btn {
+      width: 100%;
+      background: #ff477e;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(255, 71, 126, 0.35);
+      margin-top: 15px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .birthday-img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #ff477e;
+      margin-top: 10px;
+    }
+
+    .dob-badge {
+      display: inline-block;
+      background: #ffe5ec;
+      color: #ff477e;
+      font-weight: bold;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin: 10px 0;
+      font-size: 0.95rem;
+      border: 1px dashed #ff477e;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop>
+    <source src="https://assets.mixkit.co/music/preview/mixkit-celebration-song-339.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Step 0: 29 October Countdown -->
+  <div id="step0" class="card">
+    <h2>⏳ Counting Down...</h2>
+    <p>Khaas din shuru hone mein bas itna waqt bacha hai:</p>
+    
+    <div class="timer-grid">
+      <div class="t-box"><span id="days">00</span><small>Din</small></div>
+      <div class="t-box"><span id="hours">00</span><small>Ghante</small></div>
+      <div class="t-box"><span id="mins">00</span><small>Minute</small></div>
+      <div class="t-box"><span id="secs">00</span><small>Second</small></div>
+    </div>
+
+    <button class="btn" style="background:#888; font-size: 0.85rem; padding: 10px;" onclick="goToStep(0, 1)">Seedhe Surprise Dekhein (Preview) 👉</button>
+  </div>
+
+  <!-- Step 1: Gift Box -->
+  <div id="step1" class="card hidden">
+    <h2>🎁 Are ruko zara!</h2>
+    <p>Tumhare liye ek khaas parcel aaya hai. Kholkar dekhna hai?</p>
+    <div class="tap-target" onclick="startSurprise()">📦</div>
+    <br>
+    <button class="btn" onclick="startSurprise()">Haan, kholo! 👉</button>
+  </div>
+
+  <!-- Step 2: Balloon Pop -->
+  <div id="step2" class="card hidden">
+    <h2>🎈 Ruko-ruko!</h2>
+    <p>Gift aise hi nahi milega, pehle yeh gubbara phodo!</p>
+    <div class="tap-target" onclick="popBalloon()">🎈</div>
+    <div class="hint">(Gubbare par tap karo)</div>
+  </div>
+
+  <!-- Step 3: Cut Cake -->
+  <div id="step3" class="card hidden">
+    <h2>🎂 Wish maango!</h2>
+    <p>Man mein ek achhi si wish maango aur cake par tap karo!</p>
+    <div class="tap-target" onclick="cutCake()">🕯️🎂🕯️</div>
+    <div class="hint">(Cake par tap karo)</div>
+  </div>
+
+  <!-- Step 4: Final Birthday Wish + Photo + DOB -->
+  <div id="step4" class="card hidden">
+    <h2 style="color: #ff477e; font-size: 1.6rem;">🎉 HAPPY BIRTHDAY! 🎂</h2>
+    
+    <div class="dob-badge">✨ Born: 29 October ✨</div>
+    <br>
+    
+    <!-- Aapka diya hua photo link yahan laga diya hai -->
+    <img src="https://i.postimg.cc/Dzbm7LKQ/Screenshot-2026-10-28-09-51-30-27-1c337646f29875672b5a61192b9010f9.jpg" alt="Birthday" class="birthday-img">
+    
+    <p style="margin-top: 14px; font-weight: 500;">
+      Bhagwan kare tumhara yeh saal khushiyon, kamiyabi aur dher saari muskurahat se bhara ho! ❤️✨
+    </p>
+
+    <button class="btn" onclick="fireMoreConfetti()">Aur jashn manao! 🎊</button>
+  </div>
+
+  <script>
+    const targetDate = new Date("October 29, 2026 00:00:00").getTime();
+
+    const timerInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance > 0) {
+        document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+        document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+        document.getElementById("mins").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+        document.getElementById("secs").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+      } else {
+        clearInterval(timerInterval);
+        goToStep(0, 1);
+      }
+    }, 1000);
+
+    const music = document.getElementById('bgMusic');
+
+    function goToStep(current, next) {
+      document.getElementById('step' + current).classList.add('hidden');
+      document.getElementById('step' + next).classList.remove('hidden');
+    }
+
+    function startSurprise() {
+      music.play().catch(() => {});
+      goToStep(1, 2);
+    }
+
+    function popBalloon() {
+      confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
+      goToStep(2, 3);
+    }
+
+    function cutCake() {
+      goToStep(3, 4);
+      fireMegaConfetti();
+    }
+
+    function fireMegaConfetti() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      setTimeout(() => {
+        confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1 } });
+      }, 500);
+    }
+
+    function fireMoreConfetti() {
+      fireMegaConfetti();
+    }
+  </script>
+</body>
+</html>
 
